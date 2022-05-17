@@ -1,0 +1,25 @@
+
+    #Center has no tranformation, therefore we keep it the same
+    height_img_center = imgCenter.shape[0]
+    width_img_center = imgCenter.shape[1]
+
+    # Get homography from right to center
+    # ===== img_match1 is your first output =====
+    T_R2C, img_match1 = getTransform(imgCenter, imgRight)# call getTransform to get the transformation from the right to the center image
+    rc_stitched = cv2.warpPerspective(imgRight, T_R2C, (imgRight.shape[1] + imgCenter.shape[1], max(imgRight.shape[0], imgCenter.shape[0])))
+    rc_stitched[0:imgCenter.shape[0], 0:imgCenter.shape[1]] = imgCenter
+
+    # Blend center and right
+    # ===== stitched_cr is your second output =====
+    stitched_cr = rc_stitched#alpha_blend(# call alpha_blend
+    
+    # Get homography from left to stitched center_right
+    # ===== img_match2 is your third output =====
+    T_L2CR, img_match2 = getTransform(imgLeft, stitched_cr)# call getTransform to get the transformation from the left to stitched_cr
+    lc_stitched = cv2.warpPerspective(stitched_cr, T_L2CR, (stitched_cr.shape[1] + imgLeft.shape[1], max(imgLeft.shape[0], stitched_cr.shape[0])))
+    lc_stitched[0:imgLeft.shape[0], 0:imgLeft.shape[1]] = imgLeft
+    # Blend left and center_right
+    # ===== stitched_res is your fourth output =====
+    stitched_res = lc_stitched# call alpha_blend
+
+    return stitched_res, stitched_cr, img_match1, img_match2
