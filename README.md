@@ -81,6 +81,12 @@ Result:
 
  * **Subcomponent 1-a**: Write a function in Python that takes two arguments, a width parameter and a variance parameter, and returns a 2D array containing a Gaussian kernel of the desired dimension and variance. The peak of the Gaussian should be in the center of the array. Make sure to normalize the kernel such that the sum of all the elements in the array is 1. Use this function and the OpenCV’s filter2D routine to convolve the image and noisy image arrays with a 5 by 5 Gaussian kernel with sigma of 1. Repeat with a 11 by 11 Gaussian kernel with a sigma of 3. There will be four output images from this problem, namely, image convolved with 3x3, 11x11, noisy image convolved with 3x3, and 11x11. Once you fill in and run the codes, the outputs will be saved under Results folder. These images will be graded based on the difference with ground truth images. You might want to try the same thing on other images but it is not required. Include your notebook and the saved state where the output is displayed in the notebook.
 
+<style>
+pre {
+  overflow-y: auto;
+  max-height: 300px;
+}
+</style>
 ``` 
 def genGaussianKernel(width, sigma):
     
@@ -149,3 +155,90 @@ Result:
 (b)Write a function to implement a median filter. The function takes two arguments, an image and a window size(if window size is ‘k’, then a kxk window is used to determine the median pixel value at a location) and returns the output image. Do not use any inbuilt library (like scipy.ndimage_filter) to directly generate the result.
 For this question display the outputs for “probabilty of salt and pepper noise” argument in the noisy_image_generator function equal to 0.1 and 0.2, and median filter window size in median_filter function equal to 5x5.
 (c) What is the Gaussian filter size (and sigma) that achieves a similar level of noise removal.
+
+```
+# Function to generate image with salt and pepper noise
+import copy
+def noisy_image_generator(img_in, probability = 0.1):
+  # define your function here
+  # Fill in your code here
+  img_out = copy.deepcopy(img_in)
+  for r in range(len(img_out)):
+    for c in range(len(img_out[r])):
+      rand_num = np.random.uniform(0.0, 1.0)
+      if(rand_num <= .1):
+        #color pixel either black or white
+        choose_rand_color =  np.random.uniform(0.0, 1.0)
+        if(choose_rand_color <= .5):
+          img_out[r][c] = 255 # white
+        else:
+          img_out[r][c] = 0 # black
+  return img_out
+  
+# Function to apply median filter(window size kxk) on the input image  
+def median_filter(img_in, window_size = 5):
+  # define your function here
+  # Fill in your code here
+  # If you're at an edge, consider that edge as "-1"
+  result = copy.deepcopy(img_in)
+  for r in range(len(result)):
+    for c in range(len(result[r])):
+      curr_nums = []
+      for mr in range(int(r - window_size/2), int(r + window_size/2)):
+        for mc in range(int(c - window_size/2), int(c + window_size/2)):
+          if((mr >= 0 and mr < len(result)) and (mc >= 0 and mc < len(result[r]))):
+            curr_nums.append(img_in[mr][mc])
+      curr_nums.sort()
+      #print("Length of currnums should be <= 25: ", len(curr_nums))
+      result[r][c] = curr_nums[int(len(curr_nums)/2)] # median
+  return result
+  
+image_s_p1 = noisy_image_generator(img, probability = 0.1)  
+result1 = median_filter(image_s_p1, window_size = 5)
+
+image_s_p2 = noisy_image_generator(img, probability = 0.2)  
+result2 = median_filter(image_s_p2, window_size = 5)
+
+sp_gauss_kernel = genGaussianKernel(10,10)
+image_s_p_gauss = cv2.filter2D(src = image_s_p1, ddepth = -1, kernel = sp_gauss_kernel)
+cv2.imwrite("Results/P1_05.jpg", result1)    
+cv2.imwrite("Results/P1_06.jpg", result2)    
+
+# Plot results
+plt.figure(figsize = (50, 40))
+plt.subplot(1, 5, 1)
+plt.imshow(img, 'gray')
+plt.title('Original image')
+plt.axis("off")
+
+plt.subplot(1, 5, 2)
+plt.imshow(image_s_p1, 'gray')
+plt.title('Image with salt and pepper noise (noise_prob = 0.1)')
+plt.axis("off")
+
+plt.subplot(1, 5, 3)
+plt.imshow(result1, 'gray')
+plt.title('Image recovered after applying median filter')
+plt.axis("off")
+
+plt.subplot(1, 5, 4)
+plt.imshow(image_s_p2, 'gray')
+plt.title('Image with salt and pepper noise (noise_prob = 0.2)')
+plt.axis("off")
+
+plt.subplot(1, 5, 5)
+plt.imshow(result2, 'gray')
+plt.title('Image recovered after applying median filter')
+plt.axis("off")
+
+#What is the Gaussian filter size (and sigma) that achieves a similar level of noise removal.
+#Answer: width = 5, sigma = 2 ###<------------------------ANSWER TO PART C! -------------->
+plt.figure(figsize = (20, 16))
+plt.subplot(1, 5, 1)
+plt.imshow(image_s_p_gauss, 'gray')
+#plt.title('Image with noise_prob = .1 recovered after applying gauss filter of width = 5, sigma = 2')
+plt.axis("off")
+
+plt.show()
+```
+
