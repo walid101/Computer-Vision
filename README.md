@@ -72,12 +72,14 @@ plt.show()
 ```
 
 Result: 
-![#FFFFFF](./assets/cv_project1_part1.png "Binarized Image") 
+<img src = "./assets/cv_project1_part1.png" style="background-color: white">
+ <br />
  <br />
  <br />
 
-## Part 1 - Gaussian Convolution
-*Description*: Write a function in Python that takes two arguments, a width parameter and a variance parameter, and returns a 2D array containing a Gaussian kernel of the desired dimension and variance. The peak of the Gaussian should be in the center of the array. Make sure to normalize the kernel such that the sum of all the elements in the array is 1. Use this function and the OpenCV’s filter2D routine to convolve the image and noisy image arrays with a 5 by 5 Gaussian kernel with sigma of 1. Repeat with a 11 by 11 Gaussian kernel with a sigma of 3. There will be four output images from this problem, namely, image convolved with 3x3, 11x11, noisy image convolved with 3x3, and 11x11. Once you fill in and run the codes, the outputs will be saved under Results folder. These images will be graded based on the difference with ground truth images. You might want to try the same thing on other images but it is not required. Include your notebook and the saved state where the output is displayed in the notebook.
+## Part 1 - Gaussian Convolution 
+
+ * **Subcomponent 1-a**: Write a function in Python that takes two arguments, a width parameter and a variance parameter, and returns a 2D array containing a Gaussian kernel of the desired dimension and variance. The peak of the Gaussian should be in the center of the array. Make sure to normalize the kernel such that the sum of all the elements in the array is 1. Use this function and the OpenCV’s filter2D routine to convolve the image and noisy image arrays with a 5 by 5 Gaussian kernel with sigma of 1. Repeat with a 11 by 11 Gaussian kernel with a sigma of 3. There will be four output images from this problem, namely, image convolved with 3x3, 11x11, noisy image convolved with 3x3, and 11x11. Once you fill in and run the codes, the outputs will be saved under Results folder. These images will be graded based on the difference with ground truth images. You might want to try the same thing on other images but it is not required. Include your notebook and the saved state where the output is displayed in the notebook.
 
 ``` 
 def genGaussianKernel(width, sigma):
@@ -134,3 +136,16 @@ plt.axis("off")
 
 plt.show()
 ```
+Result: 
+
+<img src = "./assets/cv_project1_part2.png" style="background-color: white">
+<hr />
+ <br />
+ <br />
+ <br />
+
+ * **Subcomponent 1-b**:
+ (a)Write a function to generate an image with salt and pepper noise. The function takes two arguments, the input image and the probability that a pixel location has salt-pepper noise. A simple implementation can be to select pixel locations with probability ‘p’ where noise occurs and then with equal probability set the pixel value at those location to be 0 or 255.(Hint: Use np.random.uniform())
+(b)Write a function to implement a median filter. The function takes two arguments, an image and a window size(if window size is ‘k’, then a kxk window is used to determine the median pixel value at a location) and returns the output image. Do not use any inbuilt library (like scipy.ndimage_filter) to directly generate the result.
+For this question display the outputs for “probabilty of salt and pepper noise” argument in the noisy_image_generator function equal to 0.1 and 0.2, and median filter window size in median_filter function equal to 5x5.
+(c) What is the Gaussian filter size (and sigma) that achieves a similar level of noise removal.
