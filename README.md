@@ -72,4 +72,65 @@ plt.show()
 ```
 
 Result: 
-![Alt text](./assets/cv_project1_part1.png "Binarized Image")
+![Alt text](./assets/cv_project1_part1.png "Binarized Image") `#FFFFFF`
+ <br />
+ <br />
+
+## Part 1 - Gaussian Convolution
+*Description*: Write a function in Python that takes two arguments, a width parameter and a variance parameter, and returns a 2D array containing a Gaussian kernel of the desired dimension and variance. The peak of the Gaussian should be in the center of the array. Make sure to normalize the kernel such that the sum of all the elements in the array is 1. Use this function and the OpenCV’s filter2D routine to convolve the image and noisy image arrays with a 5 by 5 Gaussian kernel with sigma of 1. Repeat with a 11 by 11 Gaussian kernel with a sigma of 3. There will be four output images from this problem, namely, image convolved with 3x3, 11x11, noisy image convolved with 3x3, and 11x11. Once you fill in and run the codes, the outputs will be saved under Results folder. These images will be graded based on the difference with ground truth images. You might want to try the same thing on other images but it is not required. Include your notebook and the saved state where the output is displayed in the notebook.
+
+``` 
+def genGaussianKernel(width, sigma):
+    
+    # define your 2d kernel here 
+    x = [x-int(width/2) for x in range(width)] # Create std defined 1D array with difference of 1
+    g = np.exp((np.square(x) / np.square(sigma))/-2) # Gauss formula 1D
+    kernel = np.outer(g, g) #multiply 2 1D vectors to make 2D kernel => Seperability
+    kernel = kernel / np.sum(kernel) # normalize
+    return kernel
+
+# Load images
+img       = cv2.imread('SourceImages/pic.jpg', 0)
+img_noise = cv2.imread('SourceImages/pic_noisy.jpg', 0)
+img3 = cv2.imread('SourceImages/travis.png', 0)
+# Generate Gaussian kernels
+kernel_1 = genGaussianKernel(5, 1)#Fill in your code here      # 5 by 5 kernel with sigma of 1
+kernel_2 = genGaussianKernel(11, 3)#Fill in your code here      # 11 by 11 kernel with sigma of 3
+
+# Convolve with image and noisy image
+
+res_img_kernel1 = cv2.filter2D(src = img, ddepth = -1, kernel = kernel_1)
+res_img_kernel2 = cv2.filter2D(src = img, ddepth = -1, kernel = kernel_2)
+res_img_noise_kernel1 = cv2.filter2D(src = img_noise, ddepth = -1, kernel = kernel_1)
+res_img_noise_kernel2 = cv2.filter2D(src = img_noise, ddepth = -1, kernel = kernel_2)
+
+# Write out result images
+cv2.imwrite("Results/P1_01.jpg", res_img_kernel1)
+cv2.imwrite("Results/P1_02.jpg", res_img_kernel2)
+cv2.imwrite("Results/P1_03.jpg", res_img_noise_kernel1)
+cv2.imwrite("Results/P1_04.jpg", res_img_noise_kernel2)
+
+# Plot results
+plt.figure(figsize = (10, 10))
+plt.subplot(2, 2, 1)
+plt.imshow(res_img_kernel1, 'gray')
+plt.title('Image: 5x5 kernel with var as 1')
+plt.axis("off")
+
+plt.subplot(2, 2, 2)
+plt.imshow(res_img_kernel2, 'gray')
+plt.title('Image: 11x11 kernel with var as 3')
+plt.axis("off")
+
+plt.subplot(2, 2, 3)
+plt.imshow(res_img_noise_kernel1, 'gray')
+plt.title('Noisy image: 5x5 kernel with var as 1')
+plt.axis("off")
+
+plt.subplot(2, 2, 4)
+plt.imshow(res_img_noise_kernel2, 'gray')
+plt.title('Noisy image: 11x11 kernel with var as 3')
+plt.axis("off")
+
+plt.show()
+```
