@@ -128,16 +128,18 @@ def k_medians(dataset, k):
 
 np.random.seed(0)
 #centers=[[4,4], [-2, -1], [2, -3], [1, 1]]
-X, y = make_blobs(n_samples=500,centers=[[1, 1]], cluster_std=0.9)
+#X, y = make_blobs(n_samples=500,centers=[[4,4], [-2, -1],[2, -3], [1, 1]], cluster_std=0.9)
+X = np.random.randint(100, size = (100, 50))
+y = [1 for x in range(len(X))]
 data_x = X[:, 0]
 data_y = X[:, 1]
 num_outliers = 10
 for i in range(num_outliers):
-    data_x = np.append(data_x, np.random.randint(0,20))
-    data_y = np.append(data_y, np.random.randint(0,20))
+    data_x = np.append(data_x, np.random.randint(20,80))
+    data_y = np.append(data_y, np.random.randint(20,80))
 print(data_x)
 dataset = {"X": data_x, "Y": data_y}
-cents, buckets = k_medians(dataset=dataset, k=3)
+cents, buckets = k_medians(dataset=dataset, k=1)
 #cents_b, buckets_b = k_medians(dataset=dataset, k=4)
 
 # print("Centroids: ", cents)
@@ -169,7 +171,7 @@ for idx in range(len(cents)):
     x = [cents_X[idx]]
     y = [cents_Y[idx]]
     color = colors[idx-1]
-    plt.scatter(x, y, color=color)
+    plt.scatter(x, y, color='blue')
 
 outliers = find_outliers(cents, buckets, 3.5)
 print("Number of outliers: ", len(outliers))
