@@ -72,4 +72,4 @@ plt.show()
 ```
 
 Result: 
-![Alt text](assets\cv_project1_part1.png?raw=true "Binarized Image")
+![Alt text](./assets/cv_project1_part1.png "Binarized Image")
