@@ -72,7 +72,7 @@ plt.show()
 ```
 
 Result: 
-![Alt text](./assets/cv_project1_part1.png "Binarized Image") `#FFFFFF`
+![#FFFFFF](./assets/cv_project1_part1.png "Binarized Image") 
  <br />
  <br />
 
